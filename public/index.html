@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phishing Lab - Pentesting Tool</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <span class="logo-icon">🎯</span>
+                <h1>Phishing Lab</h1>
+            </div>
+            <p class="subtitle">Authorized Penetration Testing Tool — Social Engineering Simulation</p>
+            <div class="badge">⚠️ AUTHORIZED USE ONLY</div>
+        </header>
+
+        <section class="platform-selection">
+            <h2>Select Target Platform</h2>
+            <p class="section-desc">Choose a social media platform to generate a phishing simulation page.</p>
+
+            <div class="platform-grid" id="platformGrid">
+                <div class="platform-card" data-platform="instagram">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #f58529, #dd2a7b, #8134af);">
+                        <span>📸</span>
+                    </div>
+                    <h3>Instagram</h3>
+                    <p>Instagram login page simulation</p>
+                </div>
+
+                <div class="platform-card" data-platform="facebook">
+                    <div class="card-icon" style="background: #1877F2;">
+                        <span>📘</span>
+                    </div>
+                    <h3>Facebook</h3>
+                    <p>Facebook login page simulation</p>
+                </div>
+
+                <div class="platform-card" data-platform="linkedin">
+                    <div class="card-icon" style="background: #0A66C2;">
+                        <span>💼</span>
+                    </div>
+                    <h3>LinkedIn</h3>
+                    <p>LinkedIn login page simulation</p>
+                </div>
+
+                <div class="platform-card" data-platform="twitter">
+                    <div class="card-icon" style="background: #1DA1F2;">
+                        <span>🐦</span>
+                    </div>
+                    <h3>Twitter</h3>
+                    <p>Twitter/X login page simulation</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="result-section" id="resultSection" style="display: none;">
+            <h2>✅ Campaign Created</h2>
+            <div class="result-box">
+                <div class="result-header">
+                    <div class="platform-badge" id="resultPlatformBadge">Instagram</div>
+                    <span class="status-badge active">Active</span>
+                </div>
+
+                <div class="link-box">
+                    <label>Phishing Page Link:</label>
+                    <div class="link-row">
+                        <input type="text" id="phishLink" readonly>
+                        <button class="btn btn-copy" id="copyBtn" onclick="copyLink()">
+                            📋 Copy
+                        </button>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <a id="openLinkBtn" href="#" target="_blank" class="btn btn-primary">
+                        🔗 Open Phishing Page
+                    </a>
+                    <a href="dashboard.html?id=" id="dashboardBtn" class="btn btn-secondary">
+                        📊 Go to Dashboard
+                    </a>
+                    <button onclick="createNew()" class="btn btn-outline">
+                        ➕ Create New Campaign
+                    </button>
+                </div>
+
+                <div class="quick-stats">
+                    <div class="stat">
+                        <span class="stat-value" id="quickClicks">0</span>
+                        <span class="stat-label">Clicks</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-value" id="quickCreds">0</span>
+                        <span class="stat-label">Credentials</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="recent-campaigns">
+            <h2>Recent Campaigns</h2>
+            <div id="recentList">
+                <p class="empty-state">No campaigns yet. Select a platform above to begin.</p>
+            </div>
+        </section>
+    </div>
+
+    <div id="toast" class="toast">Copied!</div>
+
+    <script src="script.js"></script>
+</body>
+</html>

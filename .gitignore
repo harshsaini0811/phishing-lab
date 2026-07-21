@@ -1,0 +1,6 @@
+node_modules/
+data/
+.DS_Store
+ngrok.exe
+ngrok.zip
+cloudflared.exe

